@@ -1,0 +1,91 @@
+from django.contrib.auth.models import User
+from news.models import Author, Category, Post, PostCategory, Comment
+
+user1 = User.objects.create_user(username='user1')
+user2 = User.objects.create_user(username='user2')
+
+author1 = Author.objects.create(user=user1, rating=0)
+author2 = Author.objects.create(user=user2, rating=0)
+
+cat_sport = Category.objects.create(name='Спорт')
+cat_politics = Category.objects.create(name='Политика')
+cat_education = Category.objects.create(name='Образование')
+cat_tech = Category.objects.create(name='Технологии')
+
+post1 = Post.objects.create(
+    author=author1,
+    type='article',
+    title='Первая статья',
+    text='Текст первой статьи. Он должен быть достаточно длинным, чтобы проверить метод preview(). Возможно, тут больше 124 символов.',
+    rating=0
+)
+post2 = Post.objects.create(
+    author=author2,
+    type='article',
+    title='Вторая статья',
+    text='Содержание второй статьи. Тоже длинный текст для проверки обрезки.',
+    rating=0
+)
+post3 = Post.objects.create(
+    author=author1,
+    type='news',
+    title='Срочная новость',
+    text='Краткий текст новости.',
+    rating=0
+)
+
+PostCategory.objects.create(post=post1, category=cat_sport)
+PostCategory.objects.create(post=post1, category=cat_tech)
+PostCategory.objects.create(post=post2, category=cat_politics)
+PostCategory.objects.create(post=post3, category=cat_education)
+
+comm1 = Comment.objects.create(post=post1, user=user1, text='Комментарий к первой статье', rating=0)
+comm2 = Comment.objects.create(post=post1, user=user2, text='Ещё комментарий к первой статье', rating=0)
+comm3 = Comment.objects.create(post=post2, user=user1, text='Комментарий ко второй статье', rating=0)
+comm4 = Comment.objects.create(post=post3, user=user2, text='Комментарий к новости', rating=0)
+
+post1.like()   # +1
+post1.like()   # +1
+post1.dislike()# -1 → итого +1
+post1.save()
+
+post2.like()   # +1
+post2.like()   # +1
+post2.like()   # +1 → итого +3
+post2.save()
+
+post3.dislike()# -1
+post3.dislike()# -1 → итого -2
+post3.save()
+
+comm1.like()   # +1
+comm1.like()   # +1 → итого +2
+comm1.save()
+
+comm2.dislike()# -1
+comm2.save()
+
+comm3.like()   # +1
+comm3.save()
+
+comm4.like()   # +1
+comm4.dislike()# -1 → итого 0
+comm4.save()
+
+author1.update_rating()
+author2.update_rating()
+
+best_author = Author.objects.order_by('-rating').first()
+print('Лучший автор:', best_author.user.username, 'Рейтинг:', best_author.rating)
+
+best_post = Post.objects.order_by('-rating').first()
+print('Дата:', best_post.created_at)
+print('Автор:', best_post.author.user.username)
+print('Рейтинг:', best_post.rating)
+print('Заголовок:', best_post.title)
+print('Превью:', best_post.preview())
+
+comments = Comment.objects.filter(post=best_post).order_by('created_at')
+print('Комментарии к статье:')
+for c in comments:
+    print(f'{c.created_at} | {c.user.username} | Рейтинг: {c.rating} | {c.text}')
