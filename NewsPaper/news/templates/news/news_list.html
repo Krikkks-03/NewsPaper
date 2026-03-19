@@ -1,0 +1,13 @@
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<h1>Все новости</h1>
+{% for article in articles %}
+<h2><a href="{% url 'news_detail' article.id %}">{{ article.title|censor }}</a></h2>
+<p>{{ article.text|censor|truncatechars:20 }}</p>
+<small>{{ article.created_at|date:"d.m.Y" }}</small>
+
+{% endfor %}
+{% endblock %}

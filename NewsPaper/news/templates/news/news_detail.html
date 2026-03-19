@@ -1,0 +1,10 @@
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<h1>{{ article.title|censor }}</h1>
+<p>{{ article.text|censor }}</p>
+<small>Опубликовано: {{ article.created_at|date:"d.m.Y" }}</small>
+<p><a href="{% url 'news_list' %}">Назад к списку</a></p>
+{% endblock %}

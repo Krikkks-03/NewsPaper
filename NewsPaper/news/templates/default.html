@@ -1,0 +1,7 @@
+{% load custom_filters %}
+
+{% block content %}
+<h1>{{ article.title|censor }}</h1>
+<p>{{ article.text|censor }}</p>
+<small>{{ article.pub_date|date:"d.m.Y" }}</small>
+{% endblock %}
