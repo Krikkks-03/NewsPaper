@@ -1,13 +1,82 @@
-{% extends 'default.html' %}
-
-{% load custom_filters %}
-
-{% block content %}
-<h1>Все новости</h1>
-{% for article in articles %}
-<h2><a href="{% url 'news_detail' article.id %}">{{ article.title|censor }}</a></h2>
-<p>{{ article.text|censor|truncatechars:20 }}</p>
-<small>{{ article.created_at|date:"d.m.Y" }}</small>
-
-{% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список новостей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Новости</h1>
+        
+        <div class="mb-3">
+            <a href="{% url 'news_search' %}" class="btn btn-primary">Поиск новостей</a>
+            <a href="{% url 'news_create' %}" class="btn btn-success">Создать новость</a>
+            <a href="{% url 'article_create' %}" class="btn btn-info">Создать статью</a>
+        </div>
+        
+        {% for article in articles %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.text|truncatewords:30 }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Автор: {{ article.author.user.username }} | 
+                            Дата: {{ article.created_at|date:"d.m.Y H:i" }} | 
+                            Тип: {{ article.get_type_display }}
+                        </small>
+                    </p>
+                    <a href="{% url 'news_detail' article.pk %}" class="btn btn-primary">Читать далее</a>
+                    
+                    {% if user == article.author.user %}
+                        {% if article.type == 'news' %}
+                            <a href="{% url 'news_edit' article.pk %}" class="btn btn-warning">Редактировать</a>
+                            <a href="{% url 'news_delete' article.pk %}" class="btn btn-danger">Удалить</a>
+                        {% else %}
+                            <a href="{% url 'article_edit' article.pk %}" class="btn btn-warning">Редактировать</a>
+                            <a href="{% url 'article_delete' article.pk %}" class="btn btn-danger">Удалить</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>Новостей пока нет.</p>
+        {% endfor %}
+        
+        <!-- Пагинация -->
+        {% if paginator.num_pages > 1 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <!-- Первая страница -->
+                    {% if current_page > 3 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">1</a>
+                        </li>
+                        {% if current_page > 4 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <!-- Ближайшие страницы -->
+                    {% for page_num in page_range %}
+                        <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                        </li>
+                    {% endfor %}
+                    
+                    <!-- Последняя страница -->
+                    {% if current_page < num_pages|add:"-2" %}
+                        {% if current_page < num_pages|add:"-3" %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num_pages }}">{{ num_pages }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</body>
+</html>
