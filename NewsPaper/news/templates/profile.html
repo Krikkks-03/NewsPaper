@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Профиль пользователя {{ user.username }}</h1>
+<p>Email: {{ user.email }}</p>
+<p>Имя: {{ user.first_name|default:"не указано" }}</p>
+<p>Фамилия: {{ user.last_name|default:"не указано" }}</p>
+
+{% if user.groups.all %}
+    <p>Группы:
+        {% for group in user.groups.all %}
+            {{ group.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+{% endif %}
+
+{% if not user.groups.all|length > 0 %}
+    <p>Группы: common (по умолчанию)</p>
+{% endif %}
+
+<a href="{% url 'profile_edit' %}">Редактировать профиль</a>
+
+{% if not user.groups.filter.name == 'authors' %}
+    <form method="post" action="{% url 'become_author' %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit">Стать автором</button>
+    </form>
+{% else %}
+    <p style="color: green;">Вы являетесь автором и можете создавать и редактировать посты</p>
+{% endif %}
+
+<a href="{% url 'news_list' %}">На главную</a>
+{% endblock %}

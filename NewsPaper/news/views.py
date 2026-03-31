@@ -1,10 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Author
 from .filters import PostFilter
-from .forms import PostForm
+from .forms import ProfileEditForm, PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from django.contrib.auth.models import Group
+from django.contrib import messages
 
 
 def news_list(request):
@@ -210,3 +215,110 @@ def article_delete(request, pk):
         'post': post,
         'title': 'Удаление статьи'
     })
+
+
+# Функция проверки, является ли пользователь автором
+def is_author(user):
+    return user.groups.filter(name='authors').exists()
+
+
+# Представление для редактирования профиля (пункт 1)
+@login_required
+def profile_edit(request):
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Профиль успешно обновлен')
+            return redirect('profile')
+    else:
+        form = ProfileEditForm(instance=request.user)
+
+    return render(request, 'profile_edit.html', {'form': form})
+
+
+# Представление профиля
+@login_required
+def profile(request):
+    return render(request, 'profile.html', {'user': request.user})
+
+
+# Представление для становления автором (пункт 9)
+@login_required
+def become_author(request):
+    user = request.user
+    authors_group, _ = Group.objects.get_or_create(name='authors')
+
+    if user.groups.filter(name='authors').exists():
+        messages.info(request, 'Вы уже являетесь автором')
+    else:
+        user.groups.add(authors_group)
+        messages.success(request, 'Поздравляем! Теперь вы автор')
+
+    return redirect('profile')
+
+
+# Класс-представление для списка новостей
+class NewsListView(ListView):
+    model = Post
+    template_name = 'news_list.html'
+    context_object_name = 'news'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(type=Post.NEWS).order_by('-created_at')
+
+
+# Класс-представление для списка статей
+class ArticlesListView(ListView):
+    model = Post
+    template_name = 'articles_list.html'
+    context_object_name = 'articles'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(type=Post.ARTICLE).order_by('-created_at')
+
+
+# Класс-представление для детального просмотра поста
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
+    context_object_name = 'post'
+
+
+# Класс-представление для создания новости/статьи (пункты 10, 11)
+class PostCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_form.html'
+    success_url = reverse_lazy('news_list')
+
+    def test_func(self):
+        # Проверка прав: пользователь должен быть в группе authors
+        return self.request.user.groups.filter(name='authors').exists()
+
+    def form_valid(self, form):
+        # Автоматически назначаем автора
+        author, _ = Author.objects.get_or_create(user=self.request.user)
+        form.instance.author = author
+        return super().form_valid(form)
+
+
+# Класс-представление для редактирования новости/статьи (пункты 10, 11)
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_form.html'
+    success_url = reverse_lazy('news_list')
+
+    def test_func(self):
+        # Проверка прав: пользователь должен быть автором
+        return self.request.user.groups.filter(name='authors').exists()
+
+    def form_valid(self, form):
+        # Проверка, что пользователь редактирует свой пост
+        if form.instance.author.user != self.request.user:
+            messages.error(self.request, 'Вы можете редактировать только свои посты')
+            return redirect('post_detail', pk=form.instance.pk)
+        return super().form_valid(form)

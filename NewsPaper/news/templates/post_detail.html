@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>Тип: {{ post.get_type_display }} | Дата: {{ post.created_at|date:"d.m.Y H:i" }}</p>
+<p>Автор: {{ post.author.user.username }}</p>
+<p>Рейтинг: {{ post.rating }}</p>
+<div style="margin: 20px 0;">
+    {{ post.text|linebreaks }}
+</div>
+<p>Категории:
+    {% for category in post.categories.all %}
+        {{ category.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
+
+{% if user.groups.filter.name == 'authors' and user == post.author.user %}
+    <a href="{% url 'post_edit' post.pk %}">Редактировать</a>
+{% endif %}
+<a href="{% url 'news_list' %}">Назад</a>
+{% endblock %}
