@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .header { background: #4CAF50; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .footer { background: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; }
+        .button { background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Добро пожаловать в NewsPortal!</h1>
+    </div>
+    <div class="content">
+        <h2>Здравствуйте, {{ user.username }}!</h2>
+        <p>Спасибо за регистрацию в нашем новостном портале.</p>
+        <p>Теперь вы можете:</p>
+        <ul>
+            <li>Читать свежие новости и статьи</li>
+            <li>Подписываться на интересующие вас категории</li>
+            <li>Получать уведомления о новых публикациях</li>
+            <li>Стать автором и публиковать свои материалы</li>
+        </ul>
+        <p>
+            <a href="{{ site_url }}/news/" class="button">Перейти на сайт</a>
+        </p>
+    </div>
+    <div class="footer">
+        <p>© 2024 NewsPortal. Все права защищены.</p>
+        <p>Это письмо было отправлено автоматически, пожалуйста, не отвечайте на него.</p>
+    </div>
+</body>
+</html>

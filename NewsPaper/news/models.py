@@ -29,6 +29,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subscribers')
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'category')  # чтобы пользователь не подписался дважды
+
+        def __str__(self):
+            return f'{self.user.username} -> {self.category.name}'
+
 class Post(models.Model):
     ARTICLE = 'article'
     NEWS = 'news'

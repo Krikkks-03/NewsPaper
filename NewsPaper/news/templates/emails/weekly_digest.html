@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .header { background: #FF9800; color: white; padding: 15px; text-align: center; }
+        .content { padding: 20px; }
+        .post-item { border-bottom: 1px solid #ddd; padding: 15px 0; }
+        .post-title { font-size: 18px; font-weight: bold; color: #FF9800; }
+        .footer { background: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; }
+        .button { background: #FF9800; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Еженедельный дайджест: {{ category.name }}</h2>
+    </div>
+    <div class="content">
+        <h3>Здравствуйте, {{ user.username }}!</h3>
+        <p>За последнюю неделю в категории <strong>"{{ category.name }}"</strong> появилось {{ posts.count }} новых публикаций:</p>
+
+        {% for post in posts %}
+        <div class="post-item">
+            <div class="post-title">{{ post.title }}</div>
+            <p><strong>Автор:</strong> {{ post.author.user.username }}</p>
+            <p><strong>Дата:</strong> {{ post.created_at|date:"d.m.Y" }}</p>
+            <p>{{ post.preview|truncatewords:30 }}</p>
+            <a href="{{ site_url }}/news/{{ post.id }}/" class="button">Читать →</a>
+        </div>
+        {% endfor %}
+
+        <p style="margin-top: 20px;">
+            <a href="{{ site_url }}/news/category/{{ category.id }}/" class="button">Все статьи категории</a>
+        </p>
+    </div>
+    <div class="footer">
+        <p>Вы получили это письмо, потому что подписаны на еженедельный дайджест категории "{{ category.name }}".</p>
+        <p>Чтобы отписаться, перейдите в настройки профиля.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Категория: {{ category.name }}</h1>
+
+{% if user.is_authenticated %}
+    {% if is_subscribed %}
+        <form method="post" action="{% url 'unsubscribe' category.id %}">
+            {% csrf_token %}
+            <button type="submit" style="background: #f44336; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+                Отписаться от рассылки
+            </button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'subscribe' category.id %}">
+            {% csrf_token %}
+            <button type="submit" style="background: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+                Подписаться на рассылку новых статей
+            </button>
+        </form>
+    {% endif %}
+{% else %}
+    <p><a href="{% url 'account_login' %}">Войдите</a> чтобы подписаться на рассылку</p>
+{% endif %}
+
+<hr>
+
+<h2>Статьи в этой категории:</h2>
+
+{% for post in posts %}
+    <div style="border: 1px solid #ddd; margin: 10px; padding: 10px;">
+        <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+        <p>{{ post.created_at|date:"d.m.Y" }} | Автор: {{ post.author.user.username }}</p>
+        <p>{{ post.preview }}</p>
+    </div>
+{% empty %}
+    <p>В этой категории пока нет статей</p>
+{% endfor %}
+
+<div class="pagination">
+    {% if posts.has_previous %}
+        <a href="?page=1">Первая</a>
+        <a href="?page={{ posts.previous_page_number }}">Предыдущая</a>
+    {% endif %}
+
+    <span>Страница {{ posts.number }} из {{ posts.paginator.num_pages }}</span>
+
+    {% if posts.has_next %}
+        <a href="?page={{ posts.next_page_number }}">Следующая</a>
+        <a href="?page={{ posts.paginator.num_pages }}">Последняя</a>
+    {% endif %}
+</div>
+
+<a href="{% url 'news_list' %}">Назад ко всем новостям</a>
+{% endblock %}

@@ -155,3 +155,24 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'mnhklee@yandex.ru'
+EMAIL_HOST_PASSWORD = 'zjinpwsxpkurlige'  #пароль приложения
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Celery settings (для фоновых задач и еженедельной рассылки)
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BEAT_SCHEDULE = {
+    'weekly-digest': {
+        'task': 'news.tasks.send_weekly_digest',
+        'schedule': crontab(day_of_week='monday', hour=8, minute=0),
+    },
+}
+
+SITE_URL = 'http://127.0.0.1:8000'

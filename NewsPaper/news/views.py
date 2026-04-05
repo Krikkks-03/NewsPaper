@@ -10,6 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.models import Group
 from django.contrib import messages
+from .models import Category, Subscription
+from django.http import JsonResponse
 
 
 def news_list(request):
@@ -322,3 +324,61 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             messages.error(self.request, 'Вы можете редактировать только свои посты')
             return redirect('post_detail', pk=form.instance.pk)
         return super().form_valid(form)
+
+@login_required
+def subscribe_to_category(request, category_id):
+    """Подписка пользователя на категорию"""
+    category = get_object_or_404(Category, id=category_id)
+
+    # Проверяем, не подписан ли уже
+    subscription, created = Subscription.objects.get_or_create(
+        user=request.user,
+        category=category
+    )
+
+    if created:
+        messages.success(request, f'Вы подписались на категорию "{category.name}"')
+    else:
+        messages.info(request, f'Вы уже подписаны на категорию "{category.name}"')
+
+    return redirect('category_detail', category_id=category.id)
+
+@login_required
+def unsubscribe_from_category(request, category_id):
+    """Отписка пользователя от категории"""
+    category = get_object_or_404(Category, id=category_id)
+
+    Subscription.objects.filter(user=request.user, category=category).delete()
+    messages.success(request, f'Вы отписались от категории "{category.name}"')
+
+    return redirect('category_detail', category_id=category.id)
+
+def category_detail(request, category_id):
+    """Детальная страница категории с возможностью подписки"""
+    category = get_object_or_404(Category, id=category_id)
+    posts = Post.objects.filter(categories=category).order_by('-created_at')
+
+    # Проверяем, подписан ли текущий пользователь
+    is_subscribed = False
+    if request.user.is_authenticated:
+        is_subscribed = Subscription.objects.filter(
+            user=request.user,
+            category=category
+        ).exists()
+
+    # Пагинация
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page', 1)
+
+    try:
+        posts_page = paginator.page(page)
+    except PageNotAnInteger:
+        posts_page = paginator.page(1)
+    except EmptyPage:
+        posts_page = paginator.page(paginator.num_pages)
+
+    return render(request, 'news/category_detail.html', {
+        'category': category,
+        'posts': posts_page,
+        'is_subscribed': is_subscribed,
+    })

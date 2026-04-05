@@ -10,7 +10,7 @@
 </div>
 <p>Категории:
     {% for category in post.categories.all %}
-        {{ category.name }}{% if not forloop.last %}, {% endif %}
+        <a href="{% url 'category_detail' category.id %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
 </p>
 

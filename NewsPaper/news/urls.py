@@ -30,4 +30,8 @@ urlpatterns = [
 # Универсальные маршруты для постов (для новых представлений)
     path('posts/create/', PostCreateView.as_view(), name='post_create'),
     path('posts/<int:pk>/edit/', PostUpdateView.as_view(), name='post_edit'),
+
+    path('category/<int:category_id>/', category_detail, name='category_detail'),
+    path('category/<int:category_id>/subscribe/', subscribe_to_category, name='subscribe'),
+    path('category/<int:category_id>/unsubscribe/', unsubscribe_from_category, name='unsubscribe'),
 ]
