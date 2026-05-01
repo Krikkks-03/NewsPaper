@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
+    'django_celery_beat',
 ]
 
 # Добавить для allauth
@@ -168,6 +169,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Celery settings (для фоновых задач и еженедельной рассылки)
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# Расписание
+from celery.schedules import crontab
+
 CELERY_BEAT_SCHEDULE = {
     'weekly-digest': {
         'task': 'news.tasks.send_weekly_digest',

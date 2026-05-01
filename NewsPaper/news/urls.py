@@ -1,9 +1,6 @@
 from django.urls import path
 from . import views
-from .views import (
-    NewsListView, ArticlesListView, PostDetailView,
-    PostCreateView, PostUpdateView
-)
+from .views import *
 
 urlpatterns = [
     path('', views.news_list, name='news_list'),

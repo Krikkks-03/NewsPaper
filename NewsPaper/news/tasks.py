@@ -96,3 +96,8 @@ def send_weekly_digest():
                     html_message=html_message,
                     fail_silently=False,
                 )
+                total_sent += 1
+
+        total_categories += 1
+
+    return f"Отправлено {total_emails} писем в {total_categories} категориях"
