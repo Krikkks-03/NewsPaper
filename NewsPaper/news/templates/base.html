@@ -1,3 +1,5 @@
+{% load cache %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +16,7 @@
     </style>
 </head>
 <body>
+    {% cache 3600 main_menu request.user.is_authenticated %}
     <nav>
         <a href="{% url 'news_list' %}">Новости</a>
         <a href="{% url 'articles_list' %}">Статьи</a>
@@ -37,5 +40,12 @@
 
     {% block content %}
     {% endblock %}
+
+    {% cache 7200 footer %}
+    <footer style="margin-top: 50px; padding: 20px; background: #f5f5f5; text-align: center; border-top: 1px solid #ddd;">
+        <p>&copy; 2026 Новостной портал. Все права защищены.</p>
+        <p><small>Время генерации страницы: {% now "H:i:s" %}</small></p>
+    </footer>
+    {% endcache %}
 </body>
 </html>

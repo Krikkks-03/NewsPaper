@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
 from .models import Author, Post
 from .tasks import send_welcome_email, send_new_post_notification
+from django.core.cache import cache
 
 
 @receiver(post_save, sender=User)
@@ -28,3 +29,9 @@ def notify_subscribers_on_post_creation(sender, instance, created, **kwargs):
         # Запускаем асинхронную задачу для отправки уведомлений
         send_new_post_notification.delay(instance.id)
         print(f"Запущена задача уведомления для поста {instance.id}: {instance.title}")
+
+@receiver(post_save, sender=Post)
+def clear_cache_on_post_change(sender, instance, **kwargs):
+    """Очищает кэш при изменении или создании поста"""
+    cache.clear()
+    print(f"Кэш очищен после изменения/создания поста {instance.id}")

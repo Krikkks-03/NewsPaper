@@ -92,6 +92,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                'NewsPaper.news.context_processors.categories_processor',
             ],
         },
     },
@@ -185,3 +186,16 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 SITE_URL = 'http://127.0.0.1:8000'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'news-cache',
+        'TIMEOUT': 300,  # 5 минут по умолчанию
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+        }
+    }
+}
+
+CACHE_MIDDLEWARE_KEY_PREFIX = 'newsportal'

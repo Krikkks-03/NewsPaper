@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import *
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('', views.news_list, name='news_list'),
@@ -31,4 +32,5 @@ urlpatterns = [
     path('category/<int:category_id>/', category_detail, name='category_detail'),
     path('category/<int:category_id>/subscribe/', subscribe_to_category, name='subscribe'),
     path('category/<int:category_id>/unsubscribe/', unsubscribe_from_category, name='unsubscribe'),
+    path('', cache_page(60)(news_list), name='home'),
 ]

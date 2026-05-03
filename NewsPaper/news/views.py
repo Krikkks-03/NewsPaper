@@ -12,8 +12,13 @@ from django.contrib.auth.models import Group
 from django.contrib import messages
 from .models import Category, Subscription
 from django.http import JsonResponse
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie, vary_on_headers
+from django.core.cache import cache
 
 
+@cache_page(60)
+@vary_on_cookie
 def news_list(request):
     # Получаем все новости (тип 'news')
     posts = Post.objects.filter(type='news').order_by('-created_at')
@@ -47,6 +52,8 @@ def news_list(request):
     })
 
 
+@cache_page(300)
+@vary_on_cookie
 def news_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'news/news_detail.html', {'article': post})
@@ -353,6 +360,8 @@ def unsubscribe_from_category(request, category_id):
 
     return redirect('category_detail', category_id=category.id)
 
+@cache_page(300)
+@vary_on_cookie
 def category_detail(request, category_id):
     """Детальная страница категории с возможностью подписки"""
     category = get_object_or_404(Category, id=category_id)
