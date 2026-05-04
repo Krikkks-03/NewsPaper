@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from django.core.cache import cache
+from django.utils.decorators import method_decorator
 
 
 @cache_page(60)
@@ -63,6 +64,11 @@ def news_search(request):
     # все посты
     posts = Post.objects.all().order_by('-created_at')
 
+    sort_by = request.GET.get('sort', '-created_at')
+    valid_sorts = ['-created_at', 'created_at', '-rating', 'rating', 'title', '-title']
+    if sort_by in valid_sorts:
+        posts = posts.order_by(sort_by)
+
     # Применяем фильтры
     post_filter = PostFilter(request.GET, queryset=posts)
     filtered_posts = post_filter.qs
@@ -92,6 +98,7 @@ def news_search(request):
         'page_range': page_range,
         'current_page': current_page,
         'num_pages': num_pages,
+        'sort_by': sort_by,
     })
 
 
@@ -279,6 +286,8 @@ class NewsListView(ListView):
 
 
 # Класс-представление для списка статей
+@method_decorator(cache_page(300), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class ArticlesListView(ListView):
     model = Post
     template_name = 'articles_list.html'
@@ -290,6 +299,8 @@ class ArticlesListView(ListView):
 
 
 # Класс-представление для детального просмотра поста
+@method_decorator(cache_page(300), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'

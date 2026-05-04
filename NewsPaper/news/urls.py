@@ -19,6 +19,7 @@ urlpatterns = [
     path('articles/create/', views.article_create, name='article_create'),
     path('articles/<int:pk>/edit/', views.article_edit, name='article_edit'),
     path('articles/<int:pk>/delete/', views.article_delete, name='article_delete'),
+    path('articles/', ArticlesListView.as_view(), name='articles_list'),
 
 # Профиль (новое)
     path('profile/', views.profile, name='profile'),

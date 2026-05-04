@@ -199,3 +199,170 @@ CACHES = {
 }
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'newsportal'
+
+# Создаем директорию для логов, если её нет
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+
+# Фильтр для проверки DEBUG режима
+class RequireDebugTrue:
+    """Фильтр: пропускает сообщения только когда DEBUG = True"""
+
+    def __init__(self):
+        from django.conf import settings
+        self.debug = settings.DEBUG
+
+    def filter(self, record):
+        return self.debug
+
+
+class RequireDebugFalse:
+    """Фильтр: пропускает сообщения только когда DEBUG = False"""
+
+    def __init__(self):
+        from django.conf import settings
+        self.debug = settings.DEBUG
+
+    def filter(self, record):
+        return not self.debug
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    # Форматтеры (определяем форматы вывода)
+    'formatters': {
+        # Для консоли (DEBUG и выше)
+        'console': {
+            'format': '{asctime} - {levelname} - {message}',
+            'style': '{',
+        },
+        # Для консоли с доп. информацией (WARNING и выше)
+        'console_warning': {
+            'format': '{asctime} - {levelname} - {pathname} - {message}',
+            'style': '{',
+        },
+        # Для general.log
+        'general': {
+            'format': '{asctime} - {levelname} - {module} - {message}',
+            'style': '{',
+        },
+        # Для errors.log
+        'error': {
+            'format': '{asctime} - {levelname} - {pathname} - {message}\n{exc_info}',
+            'style': '{',
+        },
+        # Для security.log
+        'security': {
+            'format': '{asctime} - {levelname} - {module} - {message}',
+            'style': '{',
+        },
+    },
+
+    # Фильтры
+    'filters': {
+        'require_debug_true': {
+            '()': RequireDebugTrue,
+        },
+        'require_debug_false': {
+            '()': RequireDebugFalse,
+        },
+    },
+
+    # Обработчики (куда отправляем логи)
+    'handlers': {
+        # Консоль
+        'console': {
+            'class': 'logging.StreamHandler',
+            'filters': ['require_debug_true'],
+            'formatter': 'console',
+        },
+        'console_warning': {
+            'class': 'logging.StreamHandler',
+            'filters': ['require_debug_true'],
+            'formatter': 'console_warning',
+            'level': 'WARNING',
+        },
+        # Файл general.log
+        'general_file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'general.log'),
+            'filters': ['require_debug_false'],
+            'formatter': 'general',
+            'level': 'INFO',
+        },
+        # Файл errors.log (только для определенных логгеров)
+        'errors_file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'errors.log'),
+            'formatter': 'error',
+            'level': 'ERROR',
+        },
+        # Файл security.log
+        'security_file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'security.log'),
+            'formatter': 'security',
+            'level': 'INFO',
+        },
+        # Email для ошибок
+        'mail_admins': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'level': 'ERROR',
+            'include_html': False,
+        },
+    },
+
+    # Логгеры (источники сообщений)
+    'loggers': {
+        # Основной логгер django
+        'django': {
+            'handlers': ['console', 'console_warning', 'general_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Логгер django.request
+        'django.request': {
+            'handlers': ['errors_file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Логгер django.server
+        'django.server': {
+            'handlers': ['errors_file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Логгер django.template
+        'django.template': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Логгер django.db.backends
+        'django.db.backends': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Логгер django.security
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+# Настройка отправки почты для администраторов (для пункта 5)
+ADMINS = [
+    ('Admin', 'mnhklee@yandex.ru'),
+]
+
+# Убедитесь, что email настроен для отправки ошибок
+if not DEBUG:
+    SERVER_EMAIL = 'mnhklee@yandex.ru'
