@@ -1,9 +1,10 @@
 {% load cache %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>News Portal</title>
+    <title>{% trans "News Portal" %}</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
         nav { background: #333; padding: 10px; margin-bottom: 20px; }
@@ -13,23 +14,45 @@
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
         .info { background: #d1ecf1; color: #0c5460; }
+        .language-switcher { text-align: right; margin: 10px; padding: 5px; }
+        .language-switcher select { padding: 5px; border-radius: 4px; }
     </style>
 </head>
 <body>
-    {% cache 3600 main_menu request.user.is_authenticated %}
+    <!-- ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКОВ -->
+    <div class="language-switcher">
+        <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <select name="language" onchange="this.form.submit()">
+                {% get_current_language as CURRENT_LANGUAGE %}
+                {% get_available_languages as LANGUAGES %}
+                {% for lang_code, lang_name in LANGUAGES %}
+                    <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
+                        {{ lang_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- МЕНЮ (кэш с учетом языка) -->
+    {% cache 3600 main_menu request.user.is_authenticated LANGUAGE_CODE %}
     <nav>
-        <a href="{% url 'news_list' %}">Новости</a>
-        <a href="{% url 'articles_list' %}">Статьи</a>
+        <a href="{% url 'news_list' %}">{% trans "News" %}</a>
+        <a href="{% url 'articles_list' %}">{% trans "Articles" %}</a>
         {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}">Профиль</a>
-            <a href="{% url 'post_create' %}">Создать пост</a>
-            <a href="{% url 'account_logout' %}">Выйти</a>
+            <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
+            <a href="{% url 'post_create' %}">{% trans "Create post" %}</a>
+            <a href="{% url 'account_logout' %}">{% trans "Logout" %}</a>
         {% else %}
-            <a href="{% url 'account_login' %}">Войти</a>
-            <a href="{% url 'account_signup' %}">Регистрация</a>
+            <a href="{% url 'account_login' %}">{% trans "Login" %}</a>
+            <a href="{% url 'account_signup' %}">{% trans "Registration" %}</a>
         {% endif %}
     </nav>
+    {% endcache %}
 
+    <!-- СООБЩЕНИЯ -->
     {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -38,13 +61,15 @@
         </div>
     {% endif %}
 
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
     {% block content %}
     {% endblock %}
 
-    {% cache 7200 footer %}
+    <!-- ФУТЕР -->
+    {% cache 7200 footer LANGUAGE_CODE %}
     <footer style="margin-top: 50px; padding: 20px; background: #f5f5f5; text-align: center; border-top: 1px solid #ddd;">
-        <p>&copy; 2026 Новостной портал. Все права защищены.</p>
-        <p><small>Время генерации страницы: {% now "H:i:s" %}</small></p>
+        <p>&copy; 2026 {% trans "News Portal. All rights reserved." %}</p>
+        <p><small>{% trans "Page generation time:" %} {% now "H:i:s" %}</small></p>
     </footer>
     {% endcache %}
 </body>

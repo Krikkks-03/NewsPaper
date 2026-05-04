@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-05 00:06+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\NewsPaper\news\templates\base.html:7
+msgid "News Portal"
+msgstr "News Portal"
+
+#: .\NewsPaper\news\templates\base.html:42
+#: .\NewsPaper\news\templates\news_list.html:5
+msgid "News"
+msgstr "News"
+
+#: .\NewsPaper\news\templates\base.html:43
+msgid "Articles"
+msgstr "Articles"
+
+#: .\NewsPaper\news\templates\base.html:45
+msgid "Profile"
+msgstr "Profile"
+
+#: .\NewsPaper\news\templates\base.html:46
+msgid "Create post"
+msgstr "Create post"
+
+#: .\NewsPaper\news\templates\base.html:47
+msgid "Logout"
+msgstr "Logout"
+
+#: .\NewsPaper\news\templates\base.html:49
+msgid "Login"
+msgstr "Login"
+
+#: .\NewsPaper\news\templates\base.html:50
+msgid "Registration"
+msgstr "Registration"
+
+#: .\NewsPaper\news\templates\base.html:71
+msgid "News Portal. All rights reserved."
+msgstr "News Portal. All rights reserved."
+
+#: .\NewsPaper\news\templates\base.html:72
+msgid "Page generation time:"
+msgstr "Page generation time:"
+
+#: .\NewsPaper\news\templates\news_list.html:8
+msgid "Sort by:"
+msgstr "Sort by:"
+
+#: .\NewsPaper\news\templates\news_list.html:9
+msgid "Newest first"
+msgstr "Newest first"
+
+#: .\NewsPaper\news\templates\news_list.html:10
+msgid "Oldest first"
+msgstr "Oldest first"
+
+#: .\NewsPaper\news\templates\news_list.html:11
+msgid "Highest rating"
+msgstr "Highest rating"
+
+#: .\NewsPaper\news\templates\news_list.html:12
+msgid "Lowest rating"
+msgstr "Lowest rating"
+
+#: .\NewsPaper\news\templates\news_list.html:20
+msgid "Date:"
+msgstr "Date:"
+
+#: .\NewsPaper\news\templates\news_list.html:21
+msgid "Rating:"
+msgstr "Rating:"
+
+#: .\NewsPaper\news\templates\news_list.html:22
+msgid "Author:"
+msgstr "Author:"
+
+#: .\NewsPaper\news\templates\news_list.html:26
+msgid "No news yet."
+msgstr "No news yet."
+
+#: .\NewsPaper\news\templates\news_list.html:36
+msgid "Page"
+msgstr "Page"
+
+#: .\NewsPaper\news\templates\news_list.html:36
+msgid "of"
+msgstr "of"

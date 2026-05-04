@@ -1,29 +1,43 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
-<h1>Новости</h1>
-{% for post in news %}
-    <div style="border: 1px solid #ddd; margin: 10px; padding: 10px;">
-        <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-        <p>{{ post.created_at|date:"d.m.Y" }} | Автор: {{ post.author.user.username }}</p>
-        <p>{{ post.preview }}</p>
-        {% if user.groups.filter.name == 'authors' and user == post.author.user %}
-            <a href="{% url 'post_edit' post.pk %}">Редактировать</a>
-        {% endif %}
+<h1>{% trans "News" %}</h1>
+
+<div style="margin-bottom: 20px;">
+    <span>{% trans "Sort by:" %}</span>
+    <a href="?sort=-created_at">{% trans "Newest first" %}</a> |
+    <a href="?sort=created_at">{% trans "Oldest first" %}</a> |
+    <a href="?sort=-rating">{% trans "Highest rating" %}</a> |
+    <a href="?sort=rating">{% trans "Lowest rating" %}</a>
+</div>
+
+{% for article in articles %}
+    <div class="news-item" style="border-bottom: 1px solid #ddd; margin-bottom: 15px; padding-bottom: 10px;">
+        <h2><a href="{% url 'news_detail' article.id %}">{{ article.title }}</a></h2>
+        <p>{{ article.preview }}</p>
+        <div class="meta" style="color: #666; font-size: 12px;">
+            <span>{% trans "Date:" %} {{ article.created_at|date:"d.m.Y H:i" }}</span>
+            <span>{% trans "Rating:" %} {{ article.rating }}</span>
+            <span>{% trans "Author:" %} {{ article.author.user.username }}</span>
+        </div>
     </div>
 {% empty %}
-    <p>Новостей пока нет</p>
+    <p>{% trans "No news yet." %}</p>
 {% endfor %}
 
-<div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?page=1">Первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+<!-- Пагинация -->
+{% if articles.has_other_pages %}
+<div class="pagination" style="margin-top: 20px;">
+    {% if articles.has_previous %}
+        <a href="?page=1">&laquo;</a>
+        <a href="?page={{ articles.previous_page_number }}">‹</a>
     {% endif %}
-    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+    <span>{% trans "Page" %} {{ articles.number }} {% trans "of" %} {{ articles.paginator.num_pages }}</span>
+    {% if articles.has_next %}
+        <a href="?page={{ articles.next_page_number }}">›</a>
+        <a href="?page={{ articles.paginator.num_pages }}">»</a>
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}
