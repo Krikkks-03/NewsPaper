@@ -1,0 +1,199 @@
+2026-05-05 21:57:05,748 - ERROR - C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\log.py - Internal Server Error: /ru/news/
+(<class 'django.template.exceptions.TemplateDoesNotExist'>, TemplateDoesNotExist('base.html'), <traceback object at 0x00000247D4DBAE40>)
+Traceback (most recent call last):
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 135, in render
+    compiled_parent = self.get_parent(context)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 132, in get_parent
+    return self.find_template(parent, context)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 110, in find_template
+    template, origin = context.template.engine.find_template(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template_name,
+        ^^^^^^^^^^^^^^
+        skip=history,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\engine.py", line 163, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: base.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\views\decorators\vary.py", line 31, in _view_wrapper
+    response = func(request, *args, **kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\NewsPaper\news\views.py", line 47, in news_list
+    return render(request, 'news/news_list.html', {
+        'articles': posts_page,
+    ...<3 lines>...
+        'num_pages': num_pages,
+    })
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 109, in render
+    reraise(exc, self.backend)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 130, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: base.html
+2026-05-05 21:57:06,149 - ERROR - C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\log.py - "GET /ru/news/ HTTP/1.1" 500 153785
+None
+2026-05-05 22:00:39,647 - ERROR - C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\log.py - Internal Server Error: /ru/news/
+(<class 'django.template.exceptions.TemplateDoesNotExist'>, TemplateDoesNotExist('base.html'), <traceback object at 0x00000247D4DAF080>)
+Traceback (most recent call last):
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 135, in render
+    compiled_parent = self.get_parent(context)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 132, in get_parent
+    return self.find_template(parent, context)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 110, in find_template
+    template, origin = context.template.engine.find_template(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template_name,
+        ^^^^^^^^^^^^^^
+        skip=history,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\engine.py", line 163, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: base.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\views\decorators\vary.py", line 31, in _view_wrapper
+    response = func(request, *args, **kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\NewsPaper\news\views.py", line 47, in news_list
+    return render(request, 'news/news_list.html', {
+        'articles': posts_page,
+    ...<3 lines>...
+        'num_pages': num_pages,
+    })
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 109, in render
+    reraise(exc, self.backend)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 130, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: base.html
+2026-05-05 22:00:39,661 - ERROR - C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\log.py - "GET /ru/news/ HTTP/1.1" 500 153785
+None
+2026-05-05 22:34:14,203 - ERROR - C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\log.py - Internal Server Error: /ru/news/articles/
+(<class 'django.urls.exceptions.NoReverseMatch'>, NoReverseMatch("Reverse for 'post_detail' not found. 'post_detail' is not a valid view function or pattern name."), <traceback object at 0x000001D7E17F50C0>)
+Traceback (most recent call last):
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\defaulttags.py", line 249, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\template\defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\urls\resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'post_detail' not found. 'post_detail' is not a valid view function or pattern name.
+2026-05-05 22:34:14,234 - ERROR - C:\Users\Admin\PycharmProjects\NewsPortal\venv\Lib\site-packages\django\utils\log.py - "GET /ru/news/articles/ HTTP/1.1" 500 182331
+None

@@ -1,6 +1,5 @@
 {% load cache %}
 {% load i18n %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,67 +9,57 @@
         nav { background: #333; padding: 10px; margin-bottom: 20px; }
         nav a { color: white; margin: 0 10px; text-decoration: none; }
         nav a:hover { text-decoration: underline; }
-        .messages { padding: 10px; margin: 10px 0; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .info { background: #d1ecf1; color: #0c5460; }
         .language-switcher { text-align: right; margin: 10px; padding: 5px; }
         .language-switcher select { padding: 5px; border-radius: 4px; }
+        .messages { padding: 10px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; }
+        .btn { display: inline-block; padding: 5px 10px; margin: 2px; background: #007bff; color: white; text-decoration: none; border-radius: 3px; }
+        .btn-success { background: #28a745; }
+        .btn-info { background: #17a2b8; }
+        .card { border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <!-- ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКОВ -->
-    <div class="language-switcher">
-        <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            <select name="language" onchange="this.form.submit()">
-                {% get_current_language as CURRENT_LANGUAGE %}
-                {% get_available_languages as LANGUAGES %}
-                {% for lang_code, lang_name in LANGUAGES %}
-                    <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
-                        {{ lang_name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </form>
-    </div>
 
-    <!-- МЕНЮ (кэш с учетом языка) -->
-    {% cache 3600 main_menu request.user.is_authenticated LANGUAGE_CODE %}
-    <nav>
-        <a href="{% url 'news_list' %}">{% trans "News" %}</a>
-        <a href="{% url 'articles_list' %}">{% trans "Articles" %}</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
-            <a href="{% url 'post_create' %}">{% trans "Create post" %}</a>
-            <a href="{% url 'account_logout' %}">{% trans "Logout" %}</a>
-        {% else %}
-            <a href="{% url 'account_login' %}">{% trans "Login" %}</a>
-            <a href="{% url 'account_signup' %}">{% trans "Registration" %}</a>
-        {% endif %}
-    </nav>
-    {% endcache %}
+<!-- ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКОВ ЧЕРЕЗ ФОРМУ -->
+<div class="language-switcher">
+    <form action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+        <select name="language" onchange="this.form.submit()">
+            <option value="ru" {% if request.LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+            <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+        </select>
+    </form>
+</div>
 
-    <!-- СООБЩЕНИЯ -->
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        </div>
+<nav>
+    <a href="{% url 'news_list' %}">{% trans "News" %}</a>
+    <a href="{% url 'articles_list' %}">{% trans "Articles" %}</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
+        <a href="{% url 'post_create' %}">{% trans "Create post" %}</a>
+        <a href="{% url 'account_logout' %}">{% trans "Logout" %}</a>
+    {% else %}
+        <a href="{% url 'account_login' %}">{% trans "Login" %}</a>
+        <a href="{% url 'account_signup' %}">{% trans "Registration" %}</a>
     {% endif %}
+</nav>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
-    {% block content %}
-    {% endblock %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
 
-    <!-- ФУТЕР -->
-    {% cache 7200 footer LANGUAGE_CODE %}
-    <footer style="margin-top: 50px; padding: 20px; background: #f5f5f5; text-align: center; border-top: 1px solid #ddd;">
-        <p>&copy; 2026 {% trans "News Portal. All rights reserved." %}</p>
-        <p><small>{% trans "Page generation time:" %} {% now "H:i:s" %}</small></p>
-    </footer>
-    {% endcache %}
+{% block content %}
+{% endblock %}
+
+<footer style="margin-top: 50px; padding: 20px; background: #f5f5f5; text-align: center;">
+    <p>&copy; 2026 {% trans "News Portal. All rights reserved." %}</p>
+</footer>
+
 </body>
 </html>

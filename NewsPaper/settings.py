@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
     'django_celery_beat',
+    'modeltranslation',
 ]
 
 # Добавить для allauth

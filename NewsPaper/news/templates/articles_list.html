@@ -1,29 +1,30 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
-<h1>Статьи</h1>
+<h1>{% trans "Articles" %}</h1>
+
 {% for post in articles %}
-    <div style="border: 1px solid #ddd; margin: 10px; padding: 10px;">
-        <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-        <p>{{ post.created_at|date:"d.m.Y" }} | Автор: {{ post.author.user.username }}</p>
-        <p>{{ post.preview }}</p>
-        {% if user.groups.filter.name == 'authors' and user == post.author.user %}
-            <a href="{% url 'post_edit' post.pk %}">Редактировать</a>
-        {% endif %}
-    </div>
+<div style="border: 1px solid #ddd; margin: 10px; padding: 10px;">
+    <h3><a href="{% url 'news_detail' post.pk %}">{{ post.title }}</a></h3>
+    <p>{{ post.created_at|date:"d.m.Y" }} | {% trans "Author:" %} {{ post.author.user.username }}</p>
+    <p>{{ post.preview }}</p>
+</div>
 {% empty %}
-    <p>Статей пока нет</p>
+<p>{% trans "No articles yet." %}</p>
 {% endfor %}
 
 <div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?page=1">Первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+    {% if articles.has_previous %}
+        <a href="?page=1">1</a>
+        <a href="?page={{ articles.previous_page_number }}">{{ articles.previous_page_number }}</a>
     {% endif %}
-    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+
+    <strong>{{ articles.number }}</strong>
+
+    {% if articles.has_next %}
+        <a href="?page={{ articles.next_page_number }}">{{ articles.next_page_number }}</a>
+        <a href="?page={{ articles.paginator.num_pages }}">{{ articles.paginator.num_pages }}</a>
     {% endif %}
 </div>
 {% endblock %}
